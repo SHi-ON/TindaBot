@@ -71,11 +71,16 @@ class TinderLogin:
             
     def __closePopups(self):
         driver = self.driver
-        driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div/div[1]/button').click()
-        driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
-        sleep(2)
-        driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
-        sleep(2)
+        try:
+            driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div/div[1]/button').click()
+            sleep(4)
+            driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
+            sleep(4)
+            driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
+        except NoSuchElementException:
+            print('couldn\'t find an element')
+
+        sleep(10)
         try:
             element = driver.find_element_by_xpath('/html/body/div[2]/div/div/div[1]/a')
             element.click()
