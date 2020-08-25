@@ -1,0 +1,13 @@
+{
+    "login_method": "facebook",
+    "match_message": "",
+    "chance_to_like": 90,
+    "amount_of_login_attempts": 30000,
+    "amount_of_avoid_errors": 10,
+    "max_wait_time_between_action_in_sec": 5,
+    "min_wait_time_between_action_in_sec": 2,
+    "allow_to_save_ig": true,
+    "ig_file_path": "instagram.txt",
+    "allow_to_save_snap": true,
+    "snap_file_path": "snap.txt"
+}
