@@ -4,13 +4,13 @@
 
 from time import sleep
 from selenium.webdriver.common.keys import Keys
-from tinder.config import Config
+from tinder.config import Cred
 
 class GoogleLogin:
     def __init__(self, driver):
         self.driver = driver
-        self.login = Config['google']['login']
-        self.password = Config['google']['password']
+        self.login = Cred['google']['login']
+        self.password = Cred['google']['password']
         self.__isLogged = False
 
     def logIn(self):

@@ -3,13 +3,16 @@
 # Login To Tinder
 
 from time import sleep
-from tinder.config import Config
-from tinder.login.googlelogin import GoogleLogin
-from tinder.login.facebooklogin import FacebookLogin
+
 from selenium.common.exceptions import NoSuchElementException
 
+from tinder.config import Config
+from tinder.login.facebooklogin import FacebookLogin
+from tinder.login.googlelogin import GoogleLogin
+
+
 class TinderLogin:
-    def __init__(self, driver, type = Config['login_method']):
+    def __init__(self, driver, type=Config['login_method']):
         self.driver = driver
         self.type = type
         self.__isLogged = False
@@ -18,7 +21,8 @@ class TinderLogin:
         elif type == 'facebook':
             self.methodLogin = FacebookLogin(driver)
         else:
-            raise RuntimeError('Undefined or unrecognized login method to Tinder')
+            raise RuntimeError(
+                'Undefined or unrecognized login method to Tinder')
 
     def logIn(self):
         driver = self.driver
@@ -41,18 +45,21 @@ class TinderLogin:
         works = False
         for i in range(0, Config['amount_of_login_attempts']):
             try:
-                driver.find_element_by_css_selector('header > div button').click()
+                driver.find_element_by_css_selector(
+                    'header > div button').click()
                 sleep(1)
-                button = driver.find_element_by_css_selector('button[aria-label~="Google"]')
+                button = driver.find_element_by_css_selector(
+                    'button[aria-label~="Google"]')
                 button.click()
                 works = True
                 break
             except NoSuchElementException:
-                driver.execute_script('document.cookie = ""; localStorage.clear(); sessionStorage.clear();')
+                driver.execute_script(
+                    'document.cookie = ""; localStorage.clear(); sessionStorage.clear();')
                 driver.get('https://tinder.com/')
                 sleep(0.5)
                 works = False
-                    
+
         if not works:
             driver.close()
             print('Error: Login via Google is no available now. Try later.')
@@ -61,33 +68,43 @@ class TinderLogin:
         driver = self.driver
         driver.find_element_by_css_selector('header > div button').click()
         sleep(1)
-        button = driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/span/div[2]/button')
+        button = driver.find_element_by_xpath(
+            '/html/body/div[2]/div/div/div/div/div[3]/span/div[2]/button')
+        button = driver.find_element_by_xpath(
+            '/html/body/div[2]/div/div/div/div/div[3]/span/div[2]/button')
         if 'Facebook' in button.get_attribute('innerHTML'):
             button.click()
         else:
-            driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/span/button').click()
+            driver.find_element_by_xpath(
+                '/html/body/div[2]/div/div/div/div/div[3]/span/button').click()
             sleep(0.5)
-            driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/span/div[3]/button').click()
-            
+            driver.find_element_by_xpath(
+                '/html/body/div[2]/div/div/div/div/div[3]/span/div[3]/button').click()
+
     def __closePopups(self):
         driver = self.driver
         try:
-            driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div/div[1]/button').click()
+            # driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div/div[1]/button').click()
+            # Enable Location dialog
             sleep(4)
-            driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
+            driver.find_element_by_xpath(
+                '/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
+            # Enable notification dialog
             sleep(4)
-            driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
+            driver.find_element_by_xpath(
+                '/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
         except NoSuchElementException:
             print('couldn\'t find an element')
 
         sleep(10)
         try:
-            element = driver.find_element_by_xpath('/html/body/div[2]/div/div/div[1]/a')
+            element = driver.find_element_by_xpath(
+                '/html/body/div[2]/div/div/div[1]/a')
             element.click()
             driver.get('https://tinder.com/app/recs')
             sleep(2)
         except NoSuchElementException:
             pass
-       
+
     def isLogged(self):
         return self.__isLogged

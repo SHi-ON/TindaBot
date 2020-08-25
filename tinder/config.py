@@ -6,3 +6,6 @@ import json
 
 with open('config.json') as file:
     Config = json.load(file)
+
+with open('cred.json') as file:
+    Cred = json.load(file)
