@@ -86,11 +86,11 @@ class TinderLogin:
         try:
             # driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div/div[1]/button').click()
             # Enable Location dialog
-            sleep(4)
+            sleep(7)
             driver.find_element_by_xpath(
                 '/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
             # Enable notification dialog
-            sleep(4)
+            sleep(7)
             driver.find_element_by_xpath(
                 '/html/body/div[2]/div/div/div/div/div[3]/button[1]').click()
         except NoSuchElementException:
