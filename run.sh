@@ -7,7 +7,8 @@ then
 else
 #    source ~/anaconda3/etc/profile.d/conda.sh
     source ~/anaconda3/etc/profile.d/conda.sh
+    cd /Volumes/DevCamp/PyCharmProjects/TindaBot
     conda activate WebAct
-    python app.py
+    python /Volumes/DevCamp/PyCharmProjects/TindaBot/app.py
     exit 0
 fi
