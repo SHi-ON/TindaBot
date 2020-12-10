@@ -145,7 +145,5 @@ geckodriver.exe
 geckodriver
 instagram.txt
 snap.txt
-<<<<<<< HEAD
-=======
 config__.json
->>>>>>> 914627c0f2cf8fd4fafbbeed7d8e576884cdf15d
+config_.json

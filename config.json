@@ -1,6 +1,5 @@
 {
     "login_method": "facebook",
-    "match_message": "",
     "chance_to_like": 90,
     "amount_of_login_attempts": 30000,
     "amount_of_avoid_errors": 10,

@@ -28,59 +28,48 @@ class TinderLogin:
         driver = self.driver
         self.methodLogin.logIn()
         if self.methodLogin.isLogged:
-            print('=== Tinder login ===')
-            driver.get('https://tinder.com/')
-            sleep(1)
-            if self.type == 'google':
-                self.__logInViaGoogle()
-            else:
-                self.__logInViaFacebook()
-            sleep(5)
-            self.__isLogged = 'tinder.com/app/recs' in driver.current_url
-            if self.__isLogged:
-                self.__closePopups()
+            works = False
+            for i in range(0, Config['amount_of_login_attempts']):
+                try:
+                    print('=== Tinder login ===')
+                    driver.execute_script('document.cookie = ""; localStorage.clear(); sessionStorage.clear();')
+                    driver.get('https://tinder.com/')
+                    sleep(2)
+                    self.chooseLang()
+                    sleep(2)
+                    driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div/header/div/div[2]/div[2]/button').click()
+                    sleep(2)
+                    if self.type == 'google':
+                        self.__logInViaGoogle()
+                    else:
+                        self.__logInViaFacebook()
+                    sleep(5)
+                    self.__isLogged = 'tinder.com/app/recs' in driver.current_url
+                    if self.__isLogged:
+                        self.__closePopups()
+                    works = True
+                    break
+                except NoSuchElementException:
+                    works = False
+
+            if not works:
+                driver.close()
+                print('Error: Login is no available now. Try later.')
 
     def __logInViaGoogle(self):
-        driver = self.driver
-        works = False
-        for i in range(0, Config['amount_of_login_attempts']):
-            try:
-                driver.find_element_by_css_selector(
-                    'header > div button').click()
-                sleep(1)
-                button = driver.find_element_by_css_selector(
-                    'button[aria-label~="Google"]')
-                button.click()
-                works = True
-                break
-            except NoSuchElementException:
-                driver.execute_script(
-                    'document.cookie = ""; localStorage.clear(); sessionStorage.clear();')
-                driver.get('https://tinder.com/')
-                sleep(0.5)
-                works = False
-
-        if not works:
-            driver.close()
-            print('Error: Login via Google is no available now. Try later.')
+        button = self.driver.find_element_by_css_selector('button[aria-label~="Google"]')
+        button.click()
 
     def __logInViaFacebook(self):
         driver = self.driver
-        driver.find_element_by_css_selector('header > div button').click()
-        sleep(1)
-        button = driver.find_element_by_xpath(
-            '/html/body/div[2]/div/div/div/div/div[3]/span/div[2]/button')
-        button = driver.find_element_by_xpath(
-            '/html/body/div[2]/div/div/div/div/div[3]/span/div[2]/button')
+        button = driver.find_element_by_xpath('/html/body/div[2]/div/div/div[1]/div/div[3]/span/div[2]/button')
         if 'Facebook' in button.get_attribute('innerHTML'):
             button.click()
         else:
-            driver.find_element_by_xpath(
-                '/html/body/div[2]/div/div/div/div/div[3]/span/button').click()
-            sleep(0.5)
-            driver.find_element_by_xpath(
-                '/html/body/div[2]/div/div/div/div/div[3]/span/div[3]/button').click()
-
+            driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/span/button').click()
+            sleep(1)
+            driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div[3]/span/div[3]/button').click()
+            
     def __closePopups(self):
         driver = self.driver
         try:
@@ -108,3 +97,9 @@ class TinderLogin:
 
     def isLogged(self):
         return self.__isLogged
+
+    def chooseLang(self):
+        try:
+            self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/ul/li[1]/button').click()
+        except NoSuchElementException:
+            pass

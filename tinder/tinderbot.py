@@ -3,10 +3,12 @@
 # Tinder Bot
 
 import sys
+from time import sleep
 from random import randrange
 from tinder.config import Config
 import tinder.functions as fn
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementClickInterceptedException
 
 class TinderBot:
     def __init__(self, driver):
@@ -36,12 +38,32 @@ class TinderBot:
             pass
 
     def like(self):
-        self.__totalLikes += 1
-        self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[4]/button').click()
-
+        try:
+            self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[4]/button').click()
+            self.__totalLikes += 1
+        except ElementClickInterceptedException:
+            self.solveProblems()
+            sleep(2)
+            
     def dislike(self):
-        self.__totalDislikes += 1
-        self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[2]/button').click()
+        try:
+            self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div/div[2]/div[2]/button').click()
+            self.__totalDislikes += 1
+        except ElementClickInterceptedException:
+            self.solveProblems()
+            sleep(2)
+
+    def solveProblems(self):
+        try:
+            self.driver.find_element_by_xpath('/html/body/div[2]/div/div/button[2]').click()
+        except NoSuchElementException:
+            pass
+
+        try:
+            self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/main/div[2]/div/div/div[1]/div/div[4]/button').click()
+        except NoSuchElementException:
+            pass
+        
 
     def __str__(self):
         total = self.getTotalActions()
